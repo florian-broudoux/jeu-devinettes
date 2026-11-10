@@ -16,7 +16,21 @@ let tentative = 0;
 // Boucle de jeu
 while (!aTrouve) {
     const saisie = prompt(`Devinez mon score (entre ${nombreMin} et ${nombreMax}) :`);
+
+    // Annuler la partie
+    if (saisie === null) {
+        console.log("Fin de la partie");
+        break;
+    }
+
     tentative = Number(saisie);
+
+    // Recommencer la saisie si elle est vide, si elle dépasse les valeurs min et max ou si ce n'est pas un nombre
+    if (saisie === "" || tentative < nombreMin || tentative > nombreMax || isNaN(tentative)) {
+        console.log(`Mon score est un nombre compris entre ${nombreMin} et ${nombreMax}.`);
+        continue;
+    }
+
     nombreTentatives++;
 
     if (tentative < nombreSecret) {
