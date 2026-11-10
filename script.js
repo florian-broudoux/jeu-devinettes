@@ -39,6 +39,6 @@ while (!aTrouve) {
         console.log("Je ne suis pas encore si fort que ça, diminue le score.");
     } else {
         aTrouve = true;
-        console.log("En plein dans le mille, bravo !");
+        console.log(`En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`);
     }
 }
