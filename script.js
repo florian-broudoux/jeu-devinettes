@@ -24,6 +24,7 @@ while (!aTrouve) {
     } else if (tentative > nombreSecret) {
         console.log("Je ne suis pas encore si fort que ça, diminue le score.");
     } else {
+        aTrouve = true;
         console.log("En plein dans le mille, bravo !");
     }
 }
