@@ -5,6 +5,9 @@ console.log("=== Mon score se situe entre 1 et 180. ===");
 const nombreMin = 1;
 const nombreMax = 180;
 
+//Tableau pour l'historique des tentatives
+const historique = []
+
 // Nombre a deviner
 const nombreSecret = Math.floor(Math.random() * 100) + 1;
 
@@ -33,6 +36,9 @@ while (!aTrouve) {
 
     nombreTentatives++;
 
+    //Ajouter la tentative à l'historique
+    historique.push(tentative);
+
     if (tentative < nombreSecret) {
         console.log("Tu me prends pour un faible ? Augmente le score.");
     } else if (tentative > nombreSecret) {
@@ -41,4 +47,10 @@ while (!aTrouve) {
         aTrouve = true;
         console.log(`En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`);
     }
+}
+
+// Affichage de l'historique
+console.log("Historique de vos tentatives :");
+for (let i = 0; i < historique.length; i++) {
+    console.log(`Tour ${i + 1} : ${historique[i]} `);
 }
