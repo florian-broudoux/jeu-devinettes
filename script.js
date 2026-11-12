@@ -5,6 +5,7 @@ console.log("=== Mon score se situe entre 1 et 180. ===");
 const nombreMin = 1;
 const nombreMax = 180;
 
+
 //Tableau pour l'historique des tentatives
 const historique = [];
 
@@ -62,8 +63,38 @@ function afficherResultat(resultat) {
     }
 }
 
+
+function afficherBilan(statistiques) {
+    console.log("=== BILAN DE LA PARTIE ===");
+
+    // Affichage de l'historique
+    console.log("Historique de vos tentatives :");
+    for (let i = 0; i < statistiques.historique.length; i++) {
+        console.log(`Tour ${i + 1} : ${statistiques.historique[i]} `);
+    }
+
+    // Calcul de la durée en seconde
+    const duree = Math.floor(
+        (statistiques.tempsFin - statistiques.tempsDebut) / 1000,
+    );
+
+    console.log("Statistiques de la partie");
+    console.log(`Nombre secret : ${statistiques.nombreSecret}`);
+    console.log(`Nombre de tentatives : ${statistiques.nombreTentatives}`);
+    console.log(`Meilleure tentative : ${statistiques.meilleureTentative}`);
+    console.log(`Durée de la partie : ${duree} s`);
+
+     if (statistiques.aTrouve) {
+        console.log("Bravo !");
+    } else {
+        console.log("Partie abandonnée.");
+    }
+
+    console.log("==============================");
+}
+
 // Nombre a deviner avec la fonction
-const nombreSecret = genererNombre(1, 180);
+const nombreSecret = genererNombre(nombreMin, nombreMax);
 
 // Variables qui se modifient
 let nombreTentatives = 0;
@@ -120,21 +151,4 @@ for (let i = 0; i < historique.length; i++) {
     }
 }
 
-// Afficher les statistiques
-console.log("Statistiques de la partie");
-const cles = Object.keys(statistiques);
-for (let i = 0; i < cles.length; i++) {
-    console.log(`${cles[i]} : ${statistiques[cles[i]]}`);
-}
-
-// Calcul de la durée en seconde
-const duree = Math.floor(
-    (statistiques.tempsFin - statistiques.tempsDebut) / 1000,
-);
-console.log(`Durée de la partie : ${duree} s`);
-
-// Affichage de l'historique
-console.log("Historique de vos tentatives :");
-for (let i = 0; i < historique.length; i++) {
-    console.log(`Tour ${i + 1} : ${historique[i]} `);
-}
+afficherBilan(statistiques);
