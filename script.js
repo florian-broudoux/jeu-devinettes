@@ -1,16 +1,6 @@
-console.log("=== Bienvenue dans le jeu de devinettes ! ===");
-console.log("=== Mon score se situe entre 1 et 180. ===");
-
 // Valeurs fixes
 const nombreMin = 1;
 const nombreMax = 180;
-
-
-//Tableau pour l'historique des tentatives
-const historique = [];
-
-// Heure de début
-const tempsDebut = Date.now();
 
 // Fonctions
 
@@ -51,7 +41,7 @@ function verifierTentative(tentative, nombreSecret) {
     }
 }
 
-function afficherResultat(resultat) {
+function afficherResultat(resultat, nombreSecret, nombreTentatives) {
     if (resultat === "trop bas") {
         console.log("Tu me prends pour un faible ? Augmente le score.");
     } else if (resultat === "trop haut") {
@@ -62,7 +52,6 @@ function afficherResultat(resultat) {
         );
     }
 }
-
 
 function afficherBilan(statistiques) {
     console.log("=== BILAN DE LA PARTIE ===");
@@ -84,7 +73,7 @@ function afficherBilan(statistiques) {
     console.log(`Meilleure tentative : ${statistiques.meilleureTentative}`);
     console.log(`Durée de la partie : ${duree} s`);
 
-     if (statistiques.aTrouve) {
+    if (statistiques.aTrouve) {
         console.log("Bravo !");
     } else {
         console.log("Partie abandonnée.");
@@ -93,62 +82,96 @@ function afficherBilan(statistiques) {
     console.log("==============================");
 }
 
-// Nombre a deviner avec la fonction
-const nombreSecret = genererNombre(nombreMin, nombreMax);
+function jouer() {
+    let continuerAJouer = true;
 
-// Variables qui se modifient
-let nombreTentatives = 0;
-let aTrouve = false;
-let tentative = 0;
+    while (continuerAJouer) {
+        console.log("=== Bienvenue dans le jeu de devinettes ! ===");
+        console.log("=== Mon score se situe entre 1 et 180. ===");
 
-// Boucle de jeu
-while (!aTrouve) {
-    // Tentative avec la fonction
-    tentative = demanderTentative();
+        //Tableau pour l'historique des tentatives
+        const historique = [];
 
-    // Annuler la partie
-    if (tentative === null) {
-        console.log("Fin de la partie");
-        break;
-    }
+        // Heure de début
+        const tempsDebut = Date.now();
 
-    // Ajout d'une tentative
-    nombreTentatives++;
+        // Nombre a deviner avec la fonction
+        const nombreSecret = genererNombre(nombreMin, nombreMax);
 
-    //Ajouter la tentative à l'historique
-    historique.push(tentative);
+        // Variables qui se modifient
+        let nombreTentatives = 0;
+        let aTrouve = false;
+        let tentative = 0;
 
-    // Vérifier le résulat avec la fonction
-    const resultat = verifierTentative(tentative, nombreSecret);
+        // Boucle de jeu
+        while (!aTrouve) {
+            // Tentative avec la fonction
+            tentative = demanderTentative();
 
-    // Affficher le résultat avec la fonction
-    afficherResultat(resultat);
+            // Annuler la partie
+            if (tentative === null) {
+                console.log("Fin de la partie");
+                break;
+            }
 
-    // Fin de la boucle si le score est trouvé
-    if (tentative === nombreSecret) {
-        aTrouve = true;
+            // Ajout d'une tentative
+            nombreTentatives++;
+
+            //Ajouter la tentative à l'historique
+            historique.push(tentative);
+
+            // Vérifier le résulat avec la fonction
+            const resultat = verifierTentative(tentative, nombreSecret);
+
+            // Affficher le résultat avec la fonction
+            afficherResultat(resultat, nombreSecret, nombreTentatives);
+
+            // Fin de la boucle si le score est trouvé
+            if (tentative === nombreSecret) {
+                aTrouve = true;
+            }
+        }
+
+        // Objet statistiques
+        const statistiques = {
+            nombreSecret: nombreSecret,
+            nombreTentatives: nombreTentatives,
+            historique: historique,
+            tempsDebut: tempsDebut,
+            tempsFin: Date.now(),
+            aTrouve: aTrouve,
+        };
+
+        // Ajouter la meilleure tentative dans les statistiques
+        statistiques.meilleureTentative = "Aucune";
+        let plusPetitEcart = nombreMax - nombreMin + 1;
+        for (let i = 0; i < historique.length; i++) {
+            const ecart = Math.abs(historique[i] - nombreSecret);
+            if (ecart < plusPetitEcart) {
+                plusPetitEcart = ecart;
+                statistiques.meilleureTentative = historique[i];
+            }
+        }
+
+        afficherBilan(statistiques);
+
+        let reponse = prompt(
+            "Voulez-vous rejouer ? Tapez oui pour rejouer, non pour arrêter.",
+        );
+
+        while (reponse !== "oui" && reponse !== "non" && reponse !== null) {
+            console.log("Saisie incorrecte. Répondez par oui ou non.");
+            reponse = prompt(
+                "Voulez-vous rejouer ? Tapez oui pour rejouer, non pour arrêter.",
+            );
+        }
+
+        if (reponse === "non" || reponse === null ) {
+            continuerAJouer = false;
+            console.log("Merci d'avoir joué, à bientôt !");
+        }
     }
 }
 
-// Objet statistiques
-const statistiques = {
-    nombreSecret: nombreSecret,
-    nombreTentatives: nombreTentatives,
-    historique: historique,
-    tempsDebut: tempsDebut,
-    tempsFin: Date.now(),
-    aTrouve: aTrouve,
-};
-
-// Ajouter la meilleure tentative dans les statistiques
-statistiques.meilleureTentative = "Aucune";
-let plusPetitEcart = nombreMax - nombreMin + 1;
-for (let i = 0; i < historique.length; i++) {
-    const ecart = Math.abs(historique[i] - nombreSecret);
-    if (ecart < plusPetitEcart) {
-        plusPetitEcart = ecart;
-        statistiques.meilleureTentative = historique[i];
-    }
-}
-
-afficherBilan(statistiques);
+// Lancer le jeu avec la fonction
+jouer();
