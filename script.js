@@ -26,11 +26,7 @@ function demanderTentative() {
 
         if (saisie === "") {
             console.log("Vous n'avez rien saisi.");
-        } else if (
-            isNaN(nombre) ||
-            nombre < nombreMin ||
-            nombre > nombreMax
-        ) {
+        } else if (isNaN(nombre) || nombre < nombreMin || nombre > nombreMax) {
             console.log(
                 `Mon score est un nombre compris entre ${nombreMin} et ${nombreMax}.`,
             );
@@ -46,11 +42,23 @@ function demanderTentative() {
 
 function verifierTentative(tentative, nombreSecret) {
     if (tentative < nombreSecret) {
-        return "Tu me prends pour un faible ? Augmente le score.";
+        return "trop bas";
     } else if (tentative > nombreSecret) {
-        return "Je ne suis pas encore si fort que ça, diminue le score.";
+        return "trop haut";
     } else {
-        return `En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`;
+        return "trouvé";
+    }
+}
+
+function afficherResultat(resultat) {
+    if (resultat === "trop bas") {
+        console.log("Tu me prends pour un faible ? Augmente le score.");
+    } else if (resultat === "trop haut") {
+        console.log("Je ne suis pas encore si fort que ça, diminue le score.");
+    } else {
+        console.log(
+            `En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`,
+        );
     }
 }
 
@@ -66,7 +74,7 @@ let tentative = 0;
 while (!aTrouve) {
     // Tentative avec la fonction
     tentative = demanderTentative();
-    
+
     // Annuler la partie
     if (tentative === null) {
         console.log("Fin de la partie");
@@ -81,7 +89,9 @@ while (!aTrouve) {
 
     // Vérifier le résulat avec la fonction
     const resultat = verifierTentative(tentative, nombreSecret);
-    console.log(resultat);
+
+    // Affficher le résultat avec la fonction
+    afficherResultat(resultat);
 
     // Fin de la boucle si le score est trouvé
     if (tentative === nombreSecret) {
