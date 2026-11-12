@@ -1,25 +1,32 @@
 // Valeurs fixes
-const nombreMin = 1;
-const nombreMax = 180;
+const NOMBRE_MIN = 1;
+const NOMBRE_MAX = 180;
 
 // Fonctions
 
+// Nombre aléatoire
 function genererNombre(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Enregistrer une tentative du joueur
 function demanderTentative() {
-    const question = `Devinez mon score (entre ${nombreMin} et ${nombreMax}) :`;
+    const question = `Devinez mon score (entre ${NOMBRE_MIN} et ${NOMBRE_MAX}) :`;
     let saisie = prompt(question);
 
     while (saisie !== null) {
         const nombre = Number(saisie);
 
+        // Protection contre les mauvaises saisies
         if (saisie === "") {
             console.log("Vous n'avez rien saisi.");
-        } else if (isNaN(nombre) || nombre < nombreMin || nombre > nombreMax) {
+        } else if (
+            isNaN(nombre) ||
+            nombre < NOMBRE_MIN ||
+            nombre > NOMBRE_MAX
+        ) {
             console.log(
-                `Mon score est un nombre compris entre ${nombreMin} et ${nombreMax}.`,
+                `Mon score est un nombre compris entre ${NOMBRE_MIN} et ${NOMBRE_MAX}.`,
             );
         } else {
             return nombre;
@@ -31,6 +38,7 @@ function demanderTentative() {
     return null;
 }
 
+// Vérifier la tentative du joueur
 function verifierTentative(tentative, nombreSecret) {
     if (tentative < nombreSecret) {
         return "trop bas";
@@ -41,6 +49,7 @@ function verifierTentative(tentative, nombreSecret) {
     }
 }
 
+// Message de la console en fonction de la tentative du joueur
 function afficherResultat(resultat, nombreSecret, nombreTentatives) {
     if (resultat === "trop bas") {
         console.log("Tu me prends pour un faible ? Augmente le score.");
@@ -53,6 +62,7 @@ function afficherResultat(resultat, nombreSecret, nombreTentatives) {
     }
 }
 
+// Afficher le bilan de la partie
 function afficherBilan(statistiques) {
     console.log("=== BILAN DE LA PARTIE ===");
 
@@ -90,9 +100,11 @@ function afficherBilan(statistiques) {
     console.log("==============================");
 }
 
+// Fonction qui permet de lancer une partie
 function jouer() {
     let continuerAJouer = true;
 
+    // Message de bienvenue
     while (continuerAJouer) {
         console.log("=== Bienvenue dans le jeu de devinettes ! ===");
         console.log("=== Mon score se situe entre 1 et 180. ===");
@@ -104,7 +116,7 @@ function jouer() {
         const tempsDebut = Date.now();
 
         // Nombre a deviner avec la fonction
-        const nombreSecret = genererNombre(nombreMin, nombreMax);
+        const nombreSecret = genererNombre(NOMBRE_MIN, NOMBRE_MAX);
 
         // Variables qui se modifient
         let nombreTentatives = 0;
@@ -152,7 +164,7 @@ function jouer() {
 
         // Ajouter la meilleure tentative dans les statistiques
         statistiques.meilleureTentative = "Aucune";
-        let plusPetitEcart = nombreMax - nombreMin + 1;
+        let plusPetitEcart = NOMBRE_MAX - NOMBRE_MIN + 1;
         for (let i = 0; i < historique.length; i++) {
             const ecart = Math.abs(historique[i] - nombreSecret);
             if (ecart < plusPetitEcart) {
@@ -161,12 +173,15 @@ function jouer() {
             }
         }
 
+        //On affiche le bilan avec la fonction à la fin de la partie
         afficherBilan(statistiques);
 
+        //Prompt pour relancer une partie
         let reponse = prompt(
             "Voulez-vous rejouer ? Tapez oui pour rejouer, non pour arrêter.",
         );
 
+        // On relance le prompt tant que le joueur ne dit pas "oui", "non" ou clique sur annuler
         while (reponse !== "oui" && reponse !== "non" && reponse !== null) {
             console.log("Saisie incorrecte. Répondez par oui ou non.");
             reponse = prompt(
@@ -174,6 +189,7 @@ function jouer() {
             );
         }
 
+        //Si le joueur dit "non" ou clique sur annuler, on ferme la boucle continuerAJouer
         if (reponse === "non" || reponse === null) {
             continuerAJouer = false;
             console.log("Merci d'avoir joué, à bientôt !");
