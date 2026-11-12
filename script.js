@@ -1,12 +1,6 @@
 console.log("=== Bienvenue dans le jeu de devinettes ! ===");
 console.log("=== Mon score se situe entre 1 et 180. ===");
 
-// Fonctions
-
-function genererNombre(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 // Valeurs fixes
 const nombreMin = 1;
 const nombreMax = 180;
@@ -16,6 +10,39 @@ const historique = [];
 
 // Heure de début
 const tempsDebut = Date.now();
+
+// Fonctions
+
+function genererNombre(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function demanderTentative() {
+    const question = `Devinez mon score (entre ${nombreMin} et ${nombreMax}) :`;
+    let saisie = prompt(question);
+
+    while (saisie !== null) {
+        const nombre = Number(saisie);
+
+        if (saisie === "") {
+            console.log("Vous n'avez rien saisi.");
+        } else if (
+            isNaN(nombre) ||
+            nombre < nombreMin ||
+            nombre > nombreMax
+        ) {
+            console.log(
+                `Mon score est un nombre compris entre ${nombreMin} et ${nombreMax}.`,
+            );
+        } else {
+            return nombre;
+        }
+
+        saisie = prompt(question);
+    }
+
+    return null;
+}
 
 // Nombre a deviner
 const nombreSecret = genererNombre(1, 180);
@@ -27,29 +54,12 @@ let tentative = 0;
 
 // Boucle de jeu
 while (!aTrouve) {
-    const saisie = prompt(
-        `Devinez mon score (entre ${nombreMin} et ${nombreMax}) :`,
-    );
-
+    tentative = demanderTentative();
+    
     // Annuler la partie
-    if (saisie === null) {
+    if (tentative === null) {
         console.log("Fin de la partie");
         break;
-    }
-
-    tentative = Number(saisie);
-
-    // Recommencer la saisie si elle est vide, si elle dépasse les valeurs min et max ou si ce n'est pas un nombre
-    if (
-        saisie === "" ||
-        tentative < nombreMin ||
-        tentative > nombreMax ||
-        isNaN(tentative)
-    ) {
-        console.log(
-            `Mon score est un nombre compris entre ${nombreMin} et ${nombreMax}.`,
-        );
-        continue;
     }
 
     nombreTentatives++;
@@ -80,7 +90,7 @@ const statistiques = {
 };
 
 // Ajouter la meilleure tentative dans les statistiques
-statistiques.meilleurTentative = "Aucune";
+statistiques.meilleureTentative = "Aucune";
 let plusPetitEcart = nombreMax - nombreMin + 1;
 for (let i = 0; i < historique.length; i++) {
     const ecart = Math.abs(historique[i] - nombreSecret);
@@ -102,7 +112,6 @@ const duree = Math.floor(
     (statistiques.tempsFin - statistiques.tempsDebut) / 1000,
 );
 console.log(`Durée de la partie : ${duree} s`);
-
 
 // Affichage de l'historique
 console.log("Historique de vos tentatives :");
