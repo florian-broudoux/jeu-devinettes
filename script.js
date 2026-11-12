@@ -44,7 +44,17 @@ function demanderTentative() {
     return null;
 }
 
-// Nombre a deviner
+function verifierTentative(tentative, nombreSecret) {
+    if (tentative < nombreSecret) {
+        return "Tu me prends pour un faible ? Augmente le score.";
+    } else if (tentative > nombreSecret) {
+        return "Je ne suis pas encore si fort que ça, diminue le score.";
+    } else {
+        return `En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`;
+    }
+}
+
+// Nombre a deviner avec la fonction
 const nombreSecret = genererNombre(1, 180);
 
 // Variables qui se modifient
@@ -54,6 +64,7 @@ let tentative = 0;
 
 // Boucle de jeu
 while (!aTrouve) {
+    // Tentative avec la fonction
     tentative = demanderTentative();
     
     // Annuler la partie
@@ -62,20 +73,19 @@ while (!aTrouve) {
         break;
     }
 
+    // Ajout d'une tentative
     nombreTentatives++;
 
     //Ajouter la tentative à l'historique
     historique.push(tentative);
 
-    if (tentative < nombreSecret) {
-        console.log("Tu me prends pour un faible ? Augmente le score.");
-    } else if (tentative > nombreSecret) {
-        console.log("Je ne suis pas encore si fort que ça, diminue le score.");
-    } else {
+    // Vérifier le résulat avec la fonction
+    const resultat = verifierTentative(tentative, nombreSecret);
+    console.log(resultat);
+
+    // Fin de la boucle si le score est trouvé
+    if (tentative === nombreSecret) {
         aTrouve = true;
-        console.log(
-            `En plein dans le mille, bravo ! Vous avez trouvé ${nombreSecret} en ${nombreTentatives} tentatives.`,
-        );
     }
 }
 
