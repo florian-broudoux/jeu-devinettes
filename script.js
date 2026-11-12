@@ -1,6 +1,12 @@
 console.log("=== Bienvenue dans le jeu de devinettes ! ===");
 console.log("=== Mon score se situe entre 1 et 180. ===");
 
+// Fonctions
+
+function genererNombre(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Valeurs fixes
 const nombreMin = 1;
 const nombreMax = 180;
@@ -12,7 +18,7 @@ const historique = [];
 const tempsDebut = Date.now();
 
 // Nombre a deviner
-const nombreSecret = Math.floor(Math.random() * 100) + 1;
+const nombreSecret = genererNombre(1, 180);
 
 // Variables qui se modifient
 let nombreTentatives = 0;
@@ -92,9 +98,10 @@ for (let i = 0; i < cles.length; i++) {
 }
 
 // Calcul de la durée en seconde
-const duree = Math.floor((statistiques.tempsFin - statistiques.tempsDebut) / 1000);
+const duree = Math.floor(
+    (statistiques.tempsFin - statistiques.tempsDebut) / 1000,
+);
 console.log(`Durée de la partie : ${duree} s`);
-
 
 
 // Affichage de l'historique
