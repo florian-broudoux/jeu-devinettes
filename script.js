@@ -67,14 +67,22 @@ function afficherBilan(statistiques) {
         (statistiques.tempsFin - statistiques.tempsDebut) / 1000,
     );
 
+    //Affichage des statistiques
     console.log("Statistiques de la partie");
     console.log(`Nombre secret : ${statistiques.nombreSecret}`);
     console.log(`Nombre de tentatives : ${statistiques.nombreTentatives}`);
     console.log(`Meilleure tentative : ${statistiques.meilleureTentative}`);
     console.log(`Durée de la partie : ${duree} s`);
 
+    //Message personnalisé si trouve en moins de 3 ou de 5
     if (statistiques.aTrouve) {
-        console.log("Bravo !");
+        if (statistiques.nombreTentatives <= 3) {
+            console.log("Tu as un don ! incroyable");
+        } else if (statistiques.nombreTentatives <= 5) {
+            console.log("Tu as trouvé rapidement, félicitations !");
+        } else {
+            console.log("Bravo !");
+        }
     } else {
         console.log("Partie abandonnée.");
     }
@@ -166,7 +174,7 @@ function jouer() {
             );
         }
 
-        if (reponse === "non" || reponse === null ) {
+        if (reponse === "non" || reponse === null) {
             continuerAJouer = false;
             console.log("Merci d'avoir joué, à bientôt !");
         }
